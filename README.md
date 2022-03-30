@@ -1,4 +1,4 @@
-## NOTE: This repository has been archived and no longer maintained!
+## NOTE: 내가 쓸려고 수정하면서 작업하는 레포지토리
 
 # Create and deploy a blockchain network using Hyperledger Fabric SDK for Java
 
