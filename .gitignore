@@ -130,6 +130,6 @@ $RECYCLE.BIN/
 # For MAC OS X
 /**/.DS_Store
 
-.idea
-network_resources/chaincode/src/chaincode/.gradle
-network_resources/chaincode/src/chaincode/build
+.idea/
+network_resources/chaincode/src/chaincode/.gradle/
+network_resources/chaincode/src/chaincode/build/
