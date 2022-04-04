@@ -113,7 +113,7 @@ public class DeployInstantiateChaincode {
 			
 			ChannelClient channelClient = new ChannelClient(mychannel.getName(), mychannel, fabClient);
 
-			String[] arguments = { "" };
+			String[] arguments = { "InitShow", "InitDate", "InitLoc", "InitPosition", "1" };
 			response = channelClient.instantiateChainCode(Config.CHAINCODE_1_NAME, Config.CHAINCODE_1_VERSION,
 					Config.CHAINCODE_1_PATH, Type.JAVA.toString(), "init", arguments, null);
 
