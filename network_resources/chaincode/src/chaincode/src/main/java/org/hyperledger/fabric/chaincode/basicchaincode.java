@@ -22,12 +22,16 @@ public class basicchaincode extends ChaincodeBase {
     public Response init(ChaincodeStub stub) {
         try {
             List<String> args = stub.getStringArgs();
-            if (args.size() != 5) {
-                newErrorResponse("Error Incorrent arguments.");
+            /*if (args.size() != 5) {
+                newErrorResponse("Error Incorrect arguments.");
             }
             Ticket ticket = new Ticket(args.get(0), args.get(1), args.get(2), args.get(3), args.get(4));
             String ticket_id = ticket.getId();
-            stub.putState(ticket_id, gson.toJson(ticket).getBytes());
+            stub.putState(ticket_id, gson.toJson(ticket).getBytes());*/
+            if(args.size() != 2) {
+                newErrorResponse("Error Incorrect argumnets.");
+            }
+            stub.putStringState(args.get(0), args.get(1));
             return newSuccessResponse();
         } catch (Throwable e) {
             return newErrorResponse("Failed to create asset.");
@@ -39,12 +43,12 @@ public class basicchaincode extends ChaincodeBase {
         try {
             String func = stub.getFunction();
             List<String> params = stub.getParameters();
-            if(func.equals("createTicket")) {
+            /*if(func.equals("createTicket")) {
                 return createTicket(stub, params);
             }
             if(func.equals("changeOwner")) {
                 return changeOwner(stub, params);
-            }
+            }*/
             if(func.equals("set")) {
                 return set(stub, params);
             }
