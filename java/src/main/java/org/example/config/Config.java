@@ -61,10 +61,10 @@ public class Config {
 	public static final String CHAINCODE_ROOT_DIR = "chaincode";
 
 	// "fabcar"
-	public static final String CHAINCODE_1_NAME = "chaincode";
+	public static final String CHAINCODE_1_NAME = "basicchaincode";
 
 	// "github.com/fabcar"
-	public static final String CHAINCODE_1_PATH = "chaincode/build/libs";
+	public static final String CHAINCODE_1_PATH = "chaincode/src/main/java/org/hyperledger/fabric/chaincode";
 	
 	public static final String CHAINCODE_1_VERSION = "1";
 
