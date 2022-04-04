@@ -1,4 +1,4 @@
-## NOTE: 내가 쓸려고 수정하면서 작업하는 레포지토리
+## NOTE: 내가 쓸려고 수정하면서 작업하는 레포지토리 intellJ IDEA 에서 작업중..
 
 # Create and deploy a blockchain network using Hyperledger Fabric SDK for Java
 
