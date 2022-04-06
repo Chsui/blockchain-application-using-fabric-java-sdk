@@ -44,6 +44,7 @@ func (s *SmartContract) set(stub shim.ChaincodeStubInterface, args []string) sc.
 	if err != nil {
 		return shim.Error("Failed to set asset")
 	}
+	fmt.Printf("- Asset of %s : %s\n", args[0], args[1])
 	return shim.Success(nil)
 }
 
