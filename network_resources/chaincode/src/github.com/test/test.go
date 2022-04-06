@@ -93,3 +93,10 @@ func (s *SmartContract) transfer(stub shim.ChaincodeStubInterface, args []string
 	}
 	return shim.Success(nil)
 }
+
+func main() {
+	err := shim.Start(new(SmartContract))
+	if err != nil {
+		fmt.Printf("Error creating new Smart Contract")
+	}
+}
