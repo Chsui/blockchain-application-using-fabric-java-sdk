@@ -90,7 +90,7 @@ public class DeployInstantiateChaincode {
 			org2Peers.add(peer1_org2);
 			
 			Collection<ProposalResponse> response = fabClient.deployChainCode(Config.CHAINCODE_1_NAME,
-					Config.CHAINCODE_1_PATH, Config.CHAINCODE_ROOT_DIR, Type.JAVA.toString(),
+					Config.CHAINCODE_1_PATH, Config.CHAINCODE_ROOT_DIR, Type.GO_LANG.toString(),
 					Config.CHAINCODE_1_VERSION, org1Peers);
 			
 			
@@ -102,7 +102,7 @@ public class DeployInstantiateChaincode {
 			fabClient.getInstance().setUserContext(org2Admin);
 			
 			response = fabClient.deployChainCode(Config.CHAINCODE_1_NAME,
-					Config.CHAINCODE_1_PATH, Config.CHAINCODE_ROOT_DIR, Type.JAVA.toString(),
+					Config.CHAINCODE_1_PATH, Config.CHAINCODE_ROOT_DIR, Type.GO_LANG.toString(),
 					Config.CHAINCODE_1_VERSION, org2Peers);
 			
 			
@@ -115,7 +115,7 @@ public class DeployInstantiateChaincode {
 
 			String[] arguments = { "A", "1000" };
 			response = channelClient.instantiateChainCode(Config.CHAINCODE_1_NAME, Config.CHAINCODE_1_VERSION,
-					Config.CHAINCODE_1_PATH, Type.JAVA.toString(), "init", arguments, null);
+					Config.CHAINCODE_1_PATH, Type.GO_LANG.toString(), "init", arguments, null);
 
 			for (ProposalResponse res : response) {
 				Logger.getLogger(DeployInstantiateChaincode.class.getName()).log(Level.INFO,
