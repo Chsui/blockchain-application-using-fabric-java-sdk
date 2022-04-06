@@ -12,7 +12,7 @@ type SmartContract struct {
 }
 
 func (s *SmartContract) Init(stub shim.ChaincodeStubInterface) sc.Response {
-	args := stub.GetStringArgs()
+	/*args := stub.GetStringArgs()
 	if len(args) != 2 {
 		return shim.Error("Error Incorrect arguments.")
 	}
@@ -20,7 +20,7 @@ func (s *SmartContract) Init(stub shim.ChaincodeStubInterface) sc.Response {
 	err := stub.PutState(args[0], []byte(args[1]))
 	if err != nil {
 		return shim.Error(fmt.Sprintf("Failed to create asset: %s", args[0]))
-	}
+	}*/
 	return shim.Success(nil)
 }
 
