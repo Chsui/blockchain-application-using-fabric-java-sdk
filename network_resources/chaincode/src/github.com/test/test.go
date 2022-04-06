@@ -1,8 +1,8 @@
 package main
 
 import (
-	//"bytes"
-	//"encoding/json"
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"strconv"
 
@@ -11,6 +11,10 @@ import (
 )
 
 type SmartContract struct {
+}
+
+type Wallet struct {
+	Asset string `json:"asset"`
 }
 
 func (s *SmartContract) Init(stub shim.ChaincodeStubInterface) sc.Response {
@@ -33,7 +37,10 @@ func (s *SmartContract) set(stub shim.ChaincodeStubInterface, args []string) sc.
 	if len(args) != 2 {
 		return shim.Error("Error Incorrect arguments.")
 	}
-	err := stub.PutState(args[0], []byte(args[1]))
+	var wallet = Wallet{Asset: args[1]}
+
+	walletAsBytes, _ := json.Marshal(wallet)
+	err := stub.PutState(args[0], walletAsBytes)
 	if err != nil {
 		return shim.Error("Failed to set asset")
 	}
@@ -44,8 +51,8 @@ func (s *SmartContract) get(stub shim.ChaincodeStubInterface, args []string) sc.
 	if len(args) != 1 {
 		shim.Error("Error Incorrect arguments.")
 	}
-	valueAsBytes, _ := stub.GetState(args[0])
-	return shim.Success(valueAsBytes)
+	walletAsBytes, _ := stub.GetState(args[0])
+	return shim.Success(walletAsBytes)
 }
 
 func (s *SmartContract) transfer(stub shim.ChaincodeStubInterface, args []string) sc.Response {
@@ -59,21 +66,35 @@ func (s *SmartContract) transfer(stub shim.ChaincodeStubInterface, args []string
 
 	A = args[0]
 	B = args[1]
-	Avalbytes, err := stub.GetState(A)
-	Aval, _ = strconv.Atoi(string(Avalbytes))
-	Bvalbytes, err := stub.GetState(B)
-	Bval, _ = strconv.Atoi(string(Bvalbytes))
-	X, err = strconv.Atoi(args[2])
+
+	AWalletAsBytes, _ := stub.GetState(A)
+	AWallet := Wallet{}
+	json.Unmarshal(AWalletAsBytes, &AWallet)
+	Aval, _ = strconv.Atoi(AWallet.Asset)
+
+	BWalletAsBytes, _ := stub.GetState(B)
+	BWallet := Wallet{}
+	json.Unmarshal(BWalletAsBytes, &BWallet)
+	Bval, _ = strconv.Atoi(BWallet.Asset)
+
+	X, _ = strconv.Atoi(args[2])
 	if Aval < X {
 		return shim.Error("Not enough value")
 	}
 	Aval = Aval - X
 	Bval = Bval + X
-	err = stub.PutState(A, []byte(strconv.Itoa(Aval)))
+
+	AWallet.Asset = strconv.Itoa(Aval)
+	BWallet.Asset = strconv.Itoa(Bval)
+
+	AWalletAsBytes, _ = json.Marshal(AWallet)
+	BWalletAsBytes, _ = json.Marshal(BWallet)
+
+	err = stub.PutState(A, AWalletAsBytes)
 	if err != nil {
 		shim.Error(err.Error())
 	}
-	err = stub.PutState(B, []byte(strconv.Itoa(Bval)))
+	err = stub.PutState(B, BWalletAsBytes)
 	if err != nil {
 		shim.Error(err.Error())
 	}
