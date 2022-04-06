@@ -5,26 +5,26 @@ import (
 	"strconv"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
-	"github.com/hyperledger/fabric/protos/peer"
+	sc "github.com/hyperledger/fabric/protos/peer"
 )
 
 type SmartContract struct {
 }
 
-func (s *SmartContract) Init(stub shim.ChaincodeStubInterface) peer.Response {
+func (s *SmartContract) Init(stub shim.ChaincodeStubInterface) sc.Response {
 	args := stub.GetStringArgs()
 	if len(args) != 2 {
 		return shim.Error("Error Incorrect arguments.")
 	}
 
-	err := stub.PutState(args[0], []byts(args[1]))
+	err := stub.PutState(args[0], []byte(args[1]))
 	if err != nil {
 		return shim.Error(fmt.Sprintf("Failed to create asset: %s", args[0]))
 	}
 	return shim.Success(nil)
 }
 
-func (s *SmartContract) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
+func (s *SmartContract) Invoke(stub shim.ChaincodeStubInterface) sc.Response {
 	function, args := stub.GetFunctionAndParameters()
 
 	var result string
@@ -46,7 +46,7 @@ func set(stub shim.ChaincodeStubInterface, args []string) (string, error) {
 	if len(args) != 2 {
 		return "", fmt.Errorf("Error Incorrect arguments.")
 	}
-	err := stub(args[0], []byte(args[1]))
+	err := stub.PutState(args[0], []byte(args[1]))
 	if err != nil {
 		return "", fmt.Errorf("Failed to set asset: %s", args[0])
 	}
@@ -73,7 +73,7 @@ func transfer(stub shim.ChaincodeStubInterface, args []string) (string, error) {
 	var X int
 	var err error
 	if len(args) != 3 {
-		return "", fnt.Errorf("Incorrect number of arguments. Expecting 3")
+		return "", fmt.Errorf("Incorrect number of arguments. Expecting 3")
 	}
 
 	A = args[0]
