@@ -47,11 +47,12 @@ public class GetChaincode {
             channel.addOrderer(orderer);
             channel.initialize();
 
-            Logger.getLogger(GetChaincode.class.getName()).log(Level.INFO, String.format("Querying asset of %s", args[0]));
-            Collection<ProposalResponse> responsesQuery = channelClient.queryByChainCode(Config.CHAINCODE_1_NAME, "get", args);
+            String[] args1 = { "A" };
+            Logger.getLogger(GetChaincode.class.getName()).log(Level.INFO, String.format("Querying asset of %s", args1[0]));
+            Collection<ProposalResponse> responsesQuery = channelClient.queryByChainCode(Config.CHAINCODE_1_NAME, "get", args1);
             for (ProposalResponse pres : responsesQuery) {
                 String stringResponse = new String(pres.getChaincodeActionResponsePayload());
-                Logger.getLogger(GetChaincode.class.getName()).log(Level.INFO, String.format("Asset of %s: %s", args[0], stringResponse));
+                Logger.getLogger(GetChaincode.class.getName()).log(Level.INFO, String.format("Asset of %s: %s", args1[0], stringResponse));
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -49,7 +49,8 @@ public class SetChaincode {
             ChaincodeID ccid = ChaincodeID.newBuilder().setName(Config.CHAINCODE_1_NAME).build();
             request.setChaincodeID(ccid);
             request.setFcn("set");
-            request.setArgs(args);
+            String[] arguments = { "A", "1000" };
+            request.setArgs(arguments);
             request.setProposalWaitTime(1000);
 
             Map<String, byte[]> tm2 = new HashMap<>();

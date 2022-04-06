@@ -1,6 +1,8 @@
 package main
 
 import (
+	//"bytes"
+	//"encoding/json"
 	"fmt"
 	"strconv"
 
@@ -12,15 +14,6 @@ type SmartContract struct {
 }
 
 func (s *SmartContract) Init(stub shim.ChaincodeStubInterface) sc.Response {
-	/*args := stub.GetStringArgs()
-	if len(args) != 2 {
-		return shim.Error("Error Incorrect arguments.")
-	}
-
-	err := stub.PutState(args[0], []byte(args[1]))
-	if err != nil {
-		return shim.Error(fmt.Sprintf("Failed to create asset: %s", args[0]))
-	}*/
 	return shim.Success(nil)
 }
 
@@ -44,7 +37,6 @@ func (s *SmartContract) set(stub shim.ChaincodeStubInterface, args []string) sc.
 	if err != nil {
 		return shim.Error("Failed to set asset")
 	}
-	fmt.Printf("- Asset of %s : %s\n", args[0], args[1])
 	return shim.Success(nil)
 }
 
@@ -52,15 +44,8 @@ func (s *SmartContract) get(stub shim.ChaincodeStubInterface, args []string) sc.
 	if len(args) != 1 {
 		shim.Error("Error Incorrect arguments.")
 	}
-	value, err := stub.GetState(args[0])
-	if err != nil {
-		return shim.Error("Failed to get asset")
-	}
-	if value == nil {
-		return shim.Error("Asset not found")
-	}
-	fmt.Printf("- Asset of %s : %s\n", args[0], string(value))
-	return shim.Success(value)
+	valueAsBytes, _ := stub.GetState(args[0])
+	return shim.Success(valueAsBytes)
 }
 
 func (s *SmartContract) transfer(stub shim.ChaincodeStubInterface, args []string) sc.Response {
@@ -84,7 +69,6 @@ func (s *SmartContract) transfer(stub shim.ChaincodeStubInterface, args []string
 	}
 	Aval = Aval - X
 	Bval = Bval + X
-	fmt.Printf("Aval = %d, Bval = %d\n", Aval, Bval)
 	err = stub.PutState(A, []byte(strconv.Itoa(Aval)))
 	if err != nil {
 		shim.Error(err.Error())
