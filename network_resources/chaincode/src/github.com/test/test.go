@@ -26,54 +26,48 @@ func (s *SmartContract) Init(stub shim.ChaincodeStubInterface) sc.Response {
 
 func (s *SmartContract) Invoke(stub shim.ChaincodeStubInterface) sc.Response {
 	function, args := stub.GetFunctionAndParameters()
-
-	var result string
-	var err error
 	if function == "set" {
-		result, err = set(stub, args)
+		return s.set(stub, args)
 	} else if function == "transfer" {
-		result, err = transfer(stub, args)
+		return s.transfer(stub, args)
 	} else if function == "get" {
-		result, err = get(stub, args)
+		return s.get(stub, args)
 	}
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-	return shim.Success([]byte(result))
+	return shim.Error("Invalid function name.")
 }
 
-func set(stub shim.ChaincodeStubInterface, args []string) (string, error) {
+func (s *SmartContract) set(stub shim.ChaincodeStubInterface, args []string) sc.Response {
 	if len(args) != 2 {
-		return "", fmt.Errorf("Error Incorrect arguments.")
+		return shim.Error("Error Incorrect arguments.")
 	}
 	err := stub.PutState(args[0], []byte(args[1]))
 	if err != nil {
-		return "", fmt.Errorf("Failed to set asset: %s", args[0])
+		return shim.Error("Failed to set asset")
 	}
-	return args[1], nil
+	return shim.Success(nil)
 }
 
-func get(stub shim.ChaincodeStubInterface, args []string) (string, error) {
+func (s *SmartContract) get(stub shim.ChaincodeStubInterface, args []string) sc.Response {
 	if len(args) != 1 {
-		return "", fmt.Errorf("Error Incorrect arguments.")
+		shim.Error("Error Incorrect arguments.")
 	}
 	value, err := stub.GetState(args[0])
 	if err != nil {
-		return "", fmt.Errorf("Failed to get asset: %s wirh error: %s", args[0], err)
+		return shim.Error("Failed to get asset")
 	}
 	if value == nil {
-		return "", fmt.Errorf("Asset not found: %s", args[0])
+		return shim.Error("Asset not found")
 	}
-	return string(value), nil
+	return shim.Success(nil)
 }
 
-func transfer(stub shim.ChaincodeStubInterface, args []string) (string, error) {
+func (s *SmartContract) transfer(stub shim.ChaincodeStubInterface, args []string) sc.Response {
 	var A, B string
 	var Aval, Bval int
 	var X int
 	var err error
 	if len(args) != 3 {
-		return "", fmt.Errorf("Incorrect number of arguments. Expecting 3")
+		return shim.Error("Incorrect number of arguments. Expecting 3")
 	}
 
 	A = args[0]
@@ -84,18 +78,18 @@ func transfer(stub shim.ChaincodeStubInterface, args []string) (string, error) {
 	Bval, _ = strconv.Atoi(string(Bvalbytes))
 	X, err = strconv.Atoi(args[2])
 	if Aval < X {
-		return "", fmt.Errorf("Not enough value %s", args[0])
+		return shim.Error("Not enough value")
 	}
 	Aval = Aval - X
 	Bval = Bval + X
 	fmt.Printf("Aval = %d, Bval = %d\n", Aval, Bval)
 	err = stub.PutState(A, []byte(strconv.Itoa(Aval)))
 	if err != nil {
-		return "", fmt.Errorf(err.Error())
+		shim.Error(err.Error())
 	}
 	err = stub.PutState(B, []byte(strconv.Itoa(Bval)))
 	if err != nil {
-		return "", fmt.Errorf(err.Error())
+		shim.Error(err.Error())
 	}
-	return args[2], nil
+	return shim.Success(nil)
 }
