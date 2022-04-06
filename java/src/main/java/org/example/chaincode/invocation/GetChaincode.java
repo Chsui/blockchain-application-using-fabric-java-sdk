@@ -27,7 +27,6 @@ public class GetChaincode {
             Util.cleanUp();
             String caUrl = Config.CA_ORG1_URL;
             CAClient caClient = new CAClient(caUrl, null);
-            // Enroll Admin to Org1MSP
             UserContext adminUserContext = new UserContext();
             adminUserContext.setName(Config.ADMIN);
             adminUserContext.setAffiliation(Config.ORG1);
@@ -47,8 +46,9 @@ public class GetChaincode {
             channel.addOrderer(orderer);
             channel.initialize();
 
+            Thread.sleep(10000);
             Logger.getLogger(GetChaincode.class.getName()).log(Level.INFO, String.format("Querying asset of %s", args[0]));
-            Collection<ProposalResponse> responsesQuery = channelClient.queryByChainCode(Config.CHAINCODE_1_NAME, "get", args);
+            Collection<ProposalResponse> responsesQuery = channelClient.queryByChainCode("test", "get", args);
             for (ProposalResponse pres : responsesQuery) {
                 String stringResponse = new String(pres.getChaincodeActionResponsePayload());
                 Logger.getLogger(GetChaincode.class.getName()).log(Level.INFO, stringResponse);
