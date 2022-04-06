@@ -60,7 +60,7 @@ func (s *SmartContract) get(stub shim.ChaincodeStubInterface, args []string) sc.
 		return shim.Error("Asset not found")
 	}
 	fmt.Printf("- Asset of %s : %s\n", args[0], string(value))
-	return shim.Success(nil)
+	return shim.Success(value)
 }
 
 func (s *SmartContract) transfer(stub shim.ChaincodeStubInterface, args []string) sc.Response {
