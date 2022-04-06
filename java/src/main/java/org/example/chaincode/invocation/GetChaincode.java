@@ -51,7 +51,7 @@ public class GetChaincode {
             Collection<ProposalResponse> responsesQuery = channelClient.queryByChainCode(Config.CHAINCODE_1_NAME, "get", args);
             for (ProposalResponse pres : responsesQuery) {
                 String stringResponse = new String(pres.getChaincodeActionResponsePayload());
-                Logger.getLogger(GetChaincode.class.getName()).log(Level.INFO, stringResponse);
+                Logger.getLogger(GetChaincode.class.getName()).log(Level.INFO, String.format("Asset of %s: %s", args[0], stringResponse));
             }
         } catch (Exception e) {
             e.printStackTrace();
