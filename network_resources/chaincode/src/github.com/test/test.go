@@ -22,11 +22,11 @@ func (s *SmartContract) Init(stub shim.ChaincodeStubInterface) sc.Response {
 
 func (s *SmartContract) Invoke(stub shim.ChaincodeStubInterface) sc.Response {
 	function, args := stub.GetFunctionAndParameters()
-	if function == "set" {
+	if function == "setAsset" {
 		return s.setAsset(stub, args)
-	} else if function == "transfer" {
+	} else if function == "transferAsset" {
 		return s.transferAsset(stub, args)
-	} else if function == "get" {
+	} else if function == "getAsset" {
 		return s.getAsset(stub, args)
 	}
 	return shim.Error("Invalid function name.")
