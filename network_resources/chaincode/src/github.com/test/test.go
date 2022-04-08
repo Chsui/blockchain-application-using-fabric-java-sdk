@@ -23,16 +23,16 @@ func (s *SmartContract) Init(stub shim.ChaincodeStubInterface) sc.Response {
 func (s *SmartContract) Invoke(stub shim.ChaincodeStubInterface) sc.Response {
 	function, args := stub.GetFunctionAndParameters()
 	if function == "set" {
-		return s.set(stub, args)
+		return s.setAsset(stub, args)
 	} else if function == "transfer" {
-		return s.transfer(stub, args)
+		return s.transferAsset(stub, args)
 	} else if function == "get" {
-		return s.get(stub, args)
+		return s.getAsset(stub, args)
 	}
 	return shim.Error("Invalid function name.")
 }
 
-func (s *SmartContract) set(stub shim.ChaincodeStubInterface, args []string) sc.Response {
+func (s *SmartContract) setAsset(stub shim.ChaincodeStubInterface, args []string) sc.Response {
 	if len(args) != 2 {
 		return shim.Error("Error Incorrect arguments.")
 	}
@@ -46,7 +46,7 @@ func (s *SmartContract) set(stub shim.ChaincodeStubInterface, args []string) sc.
 	return shim.Success(nil)
 }
 
-func (s *SmartContract) get(stub shim.ChaincodeStubInterface, args []string) sc.Response {
+func (s *SmartContract) getAsset(stub shim.ChaincodeStubInterface, args []string) sc.Response {
 	if len(args) != 1 {
 		shim.Error("Error Incorrect arguments.")
 	}
@@ -54,7 +54,7 @@ func (s *SmartContract) get(stub shim.ChaincodeStubInterface, args []string) sc.
 	return shim.Success(walletAsBytes)
 }
 
-func (s *SmartContract) transfer(stub shim.ChaincodeStubInterface, args []string) sc.Response {
+func (s *SmartContract) transferAsset(stub shim.ChaincodeStubInterface, args []string) sc.Response {
 	var A, B string
 	var Aval, Bval int
 	var X int

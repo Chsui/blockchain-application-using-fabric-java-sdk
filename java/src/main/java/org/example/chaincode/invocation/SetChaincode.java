@@ -48,7 +48,7 @@ public class SetChaincode {
             TransactionProposalRequest request = fabClient.getInstance().newTransactionProposalRequest();
             ChaincodeID ccid = ChaincodeID.newBuilder().setName(Config.CHAINCODE_1_NAME).build();
             request.setChaincodeID(ccid);
-            request.setFcn("set");
+            request.setFcn("setAsset");
             request.setArgs(args);
             request.setProposalWaitTime(1000);
 
