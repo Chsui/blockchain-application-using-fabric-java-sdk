@@ -39,10 +39,8 @@ func (s *SmartContract) setAsset(stub shim.ChaincodeStubInterface, args []string
 	var wallet = Wallet{Asset: args[1]}
 
 	walletAsBytes, _ := json.Marshal(wallet)
-	err := stub.PutState(args[0], walletAsBytes)
-	if err != nil {
-		return shim.Error("Failed to set asset")
-	}
+	stub.PutState(args[0], walletAsBytes)
+
 	return shim.Success(nil)
 }
 
