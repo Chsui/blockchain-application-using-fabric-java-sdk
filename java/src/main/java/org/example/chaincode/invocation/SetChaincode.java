@@ -14,8 +14,14 @@ import org.example.client.FabricClient;
 import org.example.config.Config;
 import org.example.user.UserContext;
 import org.example.util.Util;
-import org.hyperledger.fabric.sdk.*;
+import org.hyperledger.fabric.sdk.ChaincodeID;
 import org.hyperledger.fabric.sdk.ChaincodeResponse.Status;
+import org.hyperledger.fabric.sdk.Channel;
+import org.hyperledger.fabric.sdk.EventHub;
+import org.hyperledger.fabric.sdk.Orderer;
+import org.hyperledger.fabric.sdk.Peer;
+import org.hyperledger.fabric.sdk.ProposalResponse;
+import org.hyperledger.fabric.sdk.TransactionProposalRequest;
 
 public class SetChaincode {
     private static final byte[] EXPECTED_EVENT_DATA = "!".getBytes(UTF_8);
@@ -49,7 +55,8 @@ public class SetChaincode {
             ChaincodeID ccid = ChaincodeID.newBuilder().setName(Config.CHAINCODE_1_NAME).build();
             request.setChaincodeID(ccid);
             request.setFcn("setAsset");
-            request.setArgs(args);
+            String[] arguments = { "A", "1000" };
+            request.setArgs(arguments);
             request.setProposalWaitTime(1000);
 
             Map<String, byte[]> tm2 = new HashMap<>();
