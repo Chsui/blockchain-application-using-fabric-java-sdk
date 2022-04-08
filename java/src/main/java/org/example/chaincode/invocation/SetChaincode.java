@@ -68,7 +68,7 @@ public class SetChaincode {
             Collection<ProposalResponse> responses = channelClient.sendTransactionProposal(request);
             for (ProposalResponse res: responses) {
                 Status status = res.getStatus();
-                Logger.getLogger(SetChaincode.class.getName()).log(Level.INFO,"Invoked set on "+Config.CHAINCODE_1_NAME + ". Status - " + status);
+                Logger.getLogger(SetChaincode.class.getName()).log(Level.INFO,"Invoked setAsset on "+Config.CHAINCODE_1_NAME + ". Status - " + status);
             }
         } catch (Exception e) {
             e.printStackTrace();

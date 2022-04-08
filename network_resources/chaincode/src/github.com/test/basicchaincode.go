@@ -3,8 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"strconv"
-
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
 )
@@ -13,7 +11,7 @@ type SmartContract struct {
 }
 
 type Wallet struct {
-	Asset string `json:"asset"`
+	Asset   string `json:"asset"`
 }
 
 func (s *SmartContract) Init(stub shim.ChaincodeStubInterface) sc.Response {
@@ -24,9 +22,9 @@ func (s *SmartContract) Invoke(stub shim.ChaincodeStubInterface) sc.Response {
 	function, args := stub.GetFunctionAndParameters()
 	if function == "setAsset" {
 		return s.setAsset(stub, args)
-	} else if function == "transferAsset" {
+	} /*else if function == "transferAsset" {
 		return s.transferAsset(stub, args)
-	} else if function == "getAsset" {
+	}*/ else if function == "getAsset" {
 		return s.getAsset(stub, args)
 	}
 	return shim.Error("Invalid function name.")
@@ -52,7 +50,7 @@ func (s *SmartContract) getAsset(stub shim.ChaincodeStubInterface, args []string
 	return shim.Success(walletAsBytes)
 }
 
-func (s *SmartContract) transferAsset(stub shim.ChaincodeStubInterface, args []string) sc.Response {
+/*func (s *SmartContract) transferAsset(stub shim.ChaincodeStubInterface, args []string) sc.Response {
 	var A, B string
 	var Aval, Bval int
 	var X int
@@ -96,7 +94,7 @@ func (s *SmartContract) transferAsset(stub shim.ChaincodeStubInterface, args []s
 		shim.Error(err.Error())
 	}
 	return shim.Success(nil)
-}
+}*/
 
 func main() {
 	err := shim.Start(new(SmartContract))
