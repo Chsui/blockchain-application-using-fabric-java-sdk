@@ -65,7 +65,6 @@ public class SetChaincode {
             tm2.put("result", ":)".getBytes(UTF_8));
             tm2.put(EXPECTED_EVENT_NAME, EXPECTED_EVENT_DATA);
             request.setTransientMap(tm2);
-            Logger.getLogger(SetChaincode.class.getName()).log(Level.INFO, String.format("Set asset of %s: %s", args[0], args[1]));
             Collection<ProposalResponse> responses = channelClient.sendTransactionProposal(request);
             for (ProposalResponse res: responses) {
                 Status status = res.getStatus();
