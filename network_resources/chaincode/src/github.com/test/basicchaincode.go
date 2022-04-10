@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
+	"strconv"
 )
 
 type SmartContract struct {
@@ -24,6 +25,8 @@ func (s *SmartContract) Invoke(stub shim.ChaincodeStubInterface) sc.Response {
 		return s.setAsset(stub, args)
 	} else if function == "getAsset" {
 		return s.getAsset(stub, args)
+	} else if function == "transferAsset" {
+		return s.transferAsset(stub, args)
 	}
 	return shim.Error("Invalid function name.")
 }
@@ -48,51 +51,43 @@ func (s *SmartContract) getAsset(stub shim.ChaincodeStubInterface, args []string
 	return shim.Success(walletAsBytes)
 }
 
-/*func (s *SmartContract) transferAsset(stub shim.ChaincodeStubInterface, args []string) sc.Response {
-	var A, B string
-	var Aval, Bval int
-	var X int
-	var err error
+func (s *SmartContract) transferAsset(stub shim.ChaincodeStubInterface, args []string) sc.Response {
 	if len(args) != 3 {
 		return shim.Error("Incorrect number of arguments. Expecting 3")
 	}
 
-	A = args[0]
-	B = args[1]
+	A := args[0]
+	B := args[1]
+	X, _ := strconv.Atoi(args[2])
 
 	AWalletAsBytes, _ := stub.GetState(A)
 	AWallet := Wallet{}
 	json.Unmarshal(AWalletAsBytes, &AWallet)
-	Aval, _ = strconv.Atoi(AWallet.Asset)
+	assetA, _ := strconv.Atoi(AWallet.Asset)
 
 	BWalletAsBytes, _ := stub.GetState(B)
 	BWallet := Wallet{}
 	json.Unmarshal(BWalletAsBytes, &BWallet)
-	Bval, _ = strconv.Atoi(BWallet.Asset)
+	assetB, _ := strconv.Atoi(BWallet.Asset)
 
-	X, _ = strconv.Atoi(args[2])
-	if Aval < X {
-		return shim.Error("Not enough value")
+	if assetA < X {
+		return shim.Error("Not enough Asset")
 	}
-	Aval = Aval - X
-	Bval = Bval + X
 
-	AWallet.Asset = strconv.Itoa(Aval)
-	BWallet.Asset = strconv.Itoa(Bval)
+	assetA = assetA - X
+	assetB = assetB + X
+
+	AWallet.Asset = strconv.Itoa(assetA)
+	BWallet.Asset = strconv.Itoa(assetB)
 
 	AWalletAsBytes, _ = json.Marshal(AWallet)
 	BWalletAsBytes, _ = json.Marshal(BWallet)
 
-	err = stub.PutState(A, AWalletAsBytes)
-	if err != nil {
-		shim.Error(err.Error())
-	}
-	err = stub.PutState(B, BWalletAsBytes)
-	if err != nil {
-		shim.Error(err.Error())
-	}
+	stub.PutState(A, AWalletAsBytes)
+	stub.PutState(B, BWalletAsBytes)
+
 	return shim.Success(nil)
-}*/
+}
 
 func main() {
 	err := shim.Start(new(SmartContract))
