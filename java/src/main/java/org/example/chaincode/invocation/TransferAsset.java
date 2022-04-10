@@ -23,7 +23,7 @@ import org.hyperledger.fabric.sdk.Peer;
 import org.hyperledger.fabric.sdk.ProposalResponse;
 import org.hyperledger.fabric.sdk.TransactionProposalRequest;
 
-public class SetChaincode {
+public class TransferAsset {
     private static final byte[] EXPECTED_EVENT_DATA = "!".getBytes(UTF_8);
     private static final String EXPECTED_EVENT_NAME = "event";
 
@@ -54,7 +54,7 @@ public class SetChaincode {
             TransactionProposalRequest request = fabClient.getInstance().newTransactionProposalRequest();
             ChaincodeID ccid = ChaincodeID.newBuilder().setName(Config.CHAINCODE_1_NAME).build();
             request.setChaincodeID(ccid);
-            request.setFcn("setAsset");
+            request.setFcn("transferAsset");
             request.setArgs(args);
             request.setProposalWaitTime(1000);
 
@@ -67,7 +67,7 @@ public class SetChaincode {
             Collection<ProposalResponse> responses = channelClient.sendTransactionProposal(request);
             for (ProposalResponse res: responses) {
                 Status status = res.getStatus();
-                Logger.getLogger(SetChaincode.class.getName()).log(Level.INFO,"Invoked setAsset on "+Config.CHAINCODE_1_NAME + ". Status - " + status);
+                Logger.getLogger(TransferAsset.class.getName()).log(Level.INFO,"Invoked transferAsset on "+Config.CHAINCODE_1_NAME + ". Status - " + status);
             }
         } catch (Exception e) {
             e.printStackTrace();

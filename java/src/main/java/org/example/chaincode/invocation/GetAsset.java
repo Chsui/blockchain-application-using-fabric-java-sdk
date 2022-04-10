@@ -3,8 +3,6 @@ package org.example.chaincode.invocation;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,16 +12,13 @@ import org.example.client.FabricClient;
 import org.example.config.Config;
 import org.example.user.UserContext;
 import org.example.util.Util;
-import org.hyperledger.fabric.sdk.ChaincodeID;
-import org.hyperledger.fabric.sdk.ChaincodeResponse.Status;
 import org.hyperledger.fabric.sdk.Channel;
 import org.hyperledger.fabric.sdk.EventHub;
 import org.hyperledger.fabric.sdk.Orderer;
 import org.hyperledger.fabric.sdk.Peer;
 import org.hyperledger.fabric.sdk.ProposalResponse;
-import org.hyperledger.fabric.sdk.TransactionProposalRequest;
 
-public class TransferChaincode {
+public class GetAsset {
     private static final byte[] EXPECTED_EVENT_DATA = "!".getBytes(UTF_8);
     private static final String EXPECTED_EVENT_NAME = "event";
 
@@ -51,23 +46,11 @@ public class TransferChaincode {
             channel.addOrderer(orderer);
             channel.initialize();
 
-            TransactionProposalRequest request = fabClient.getInstance().newTransactionProposalRequest();
-            ChaincodeID ccid = ChaincodeID.newBuilder().setName(Config.CHAINCODE_1_NAME).build();
-            request.setChaincodeID(ccid);
-            request.setFcn("transferAsset");
-            request.setArgs(args);
-            request.setProposalWaitTime(1000);
-
-            Map<String, byte[]> tm2 = new HashMap<>();
-            tm2.put("HyperLedgerFabric", "TransactionProposalRequest:JavaSDK".getBytes(UTF_8));
-            tm2.put("method", "TransactionProposalRequest".getBytes(UTF_8));
-            tm2.put("result", ":)".getBytes(UTF_8));
-            tm2.put(EXPECTED_EVENT_NAME, EXPECTED_EVENT_DATA);
-            request.setTransientMap(tm2);
-            Collection<ProposalResponse> responses = channelClient.sendTransactionProposal(request);
-            for (ProposalResponse res: responses) {
-                Status status = res.getStatus();
-                Logger.getLogger(TransferChaincode.class.getName()).log(Level.INFO,"Invoked transferAsset on "+Config.CHAINCODE_1_NAME + ". Status - " + status);
+            Logger.getLogger(GetAsset.class.getName()).log(Level.INFO, String.format("Querying asset of %s", args[0]));
+            Collection<ProposalResponse> responsesQuery = channelClient.queryByChainCode(Config.CHAINCODE_1_NAME, "getAsset", args);
+            for (ProposalResponse pres : responsesQuery) {
+                String stringResponse = new String(pres.getChaincodeActionResponsePayload());
+                Logger.getLogger(GetAsset.class.getName()).log(Level.INFO, stringResponse);
             }
         } catch (Exception e) {
             e.printStackTrace();
