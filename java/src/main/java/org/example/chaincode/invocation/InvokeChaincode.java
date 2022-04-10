@@ -14,9 +14,7 @@ package org.example.chaincode.invocation;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -71,11 +69,17 @@ public class InvokeChaincode {
 			channel.addOrderer(orderer);
 			channel.initialize();
 
+			String func = args[0];
+			List<String> tmplist = new ArrayList<String>(Arrays.asList(args));
+			tmplist.remove(0);
+			String[] arguments = tmplist.toArray(new String[0]);
+
 			TransactionProposalRequest request = fabClient.getInstance().newTransactionProposalRequest();
 			ChaincodeID ccid = ChaincodeID.newBuilder().setName(Config.CHAINCODE_1_NAME).build();
 			request.setChaincodeID(ccid);
-			request.setFcn("createCar");
-			String[] arguments = { "CAR1", "Chevy", "Volt", "Red", "Nick" };
+			//request.setFcn("createCar");
+			request.setFcn(func);
+			// String[] arguments = { "CAR1", "Chevy", "Volt", "Red", "Nick" };
 			request.setArgs(arguments);
 			request.setProposalWaitTime(1000);
 
@@ -88,7 +92,7 @@ public class InvokeChaincode {
 			Collection<ProposalResponse> responses = channelClient.sendTransactionProposal(request);
 			for (ProposalResponse res: responses) {
 				Status status = res.getStatus();
-				Logger.getLogger(InvokeChaincode.class.getName()).log(Level.INFO,"Invoked createCar on "+Config.CHAINCODE_1_NAME + ". Status - " + status);
+				Logger.getLogger(InvokeChaincode.class.getName()).log(Level.INFO,"Invoked" + func + " on "+ Config.CHAINCODE_1_NAME + ". Status - " + status);
 			}
 									
 		} catch (Exception e) {
