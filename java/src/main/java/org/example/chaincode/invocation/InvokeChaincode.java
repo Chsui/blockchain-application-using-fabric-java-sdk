@@ -81,6 +81,8 @@ public class InvokeChaincode {
 			request.setArgs(arguments);
 			request.setProposalWaitTime(1000);
 
+			Logger.getLogger(InvokeChaincode.class.getName()).log(Level.INFO,"Invoking chaincode " + func + " with arguments- " + Arrays.toString(arguments));
+
 			Map<String, byte[]> tm2 = new HashMap<>();
 			tm2.put("HyperLedgerFabric", "TransactionProposalRequest:JavaSDK".getBytes(UTF_8)); 																								
 			tm2.put("method", "TransactionProposalRequest".getBytes(UTF_8)); 
