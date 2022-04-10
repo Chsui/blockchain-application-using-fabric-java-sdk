@@ -77,9 +77,7 @@ public class InvokeChaincode {
 			TransactionProposalRequest request = fabClient.getInstance().newTransactionProposalRequest();
 			ChaincodeID ccid = ChaincodeID.newBuilder().setName(Config.CHAINCODE_1_NAME).build();
 			request.setChaincodeID(ccid);
-			//request.setFcn("createCar");
 			request.setFcn(func);
-			// String[] arguments = { "CAR1", "Chevy", "Volt", "Red", "Nick" };
 			request.setArgs(arguments);
 			request.setProposalWaitTime(1000);
 
