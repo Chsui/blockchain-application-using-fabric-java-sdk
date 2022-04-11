@@ -61,7 +61,7 @@ func getLastId(APIstub shim.ChaincodeStubInterface) int {
 }
 
 func (s *SmartContract) createTicket(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
-	if len(args) != 6 {
+	if len(args) != 5 {
 		return shim.Error("Error Incorrect arguments.")
 	}
 	lastId := getLastId(APIstub)
