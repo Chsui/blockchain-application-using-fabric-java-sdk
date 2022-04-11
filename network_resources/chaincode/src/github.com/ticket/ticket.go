@@ -65,12 +65,13 @@ func (s *SmartContract) createTicket(APIstub shim.ChaincodeStubInterface, args [
 		return shim.Error("Error Incorrect arguments.")
 	}
 	lastId := getLastId(APIstub)
+	lastId += 1
 	var ticket = Ticket{ID: strconv.Itoa(lastId), Owner: "none", Name: args[0], Date: args[1], Loc: args[2], Position: args[3], Price: args[4]}
 
 	ticketAsBytes, _ := json.Marshal(ticket)
 	APIstub.PutState(strconv.Itoa(lastId), ticketAsBytes)
 
-	setLastId(APIstub, lastId+1)
+	setLastId(APIstub, lastId)
 
 	return shim.Success(nil)
 }
@@ -90,7 +91,7 @@ func (s *SmartContract) getAllTickets(APIstub shim.ChaincodeStubInterface) sc.Re
 	buffer.WriteString("[")
 
 	bArrayMemberAlreadyWritten := false
-	for i := 0; i <= lastId; i++ {
+	for i := 1; i <= lastId; i++ {
 		if bArrayMemberAlreadyWritten == true {
 			buffer.WriteString(",")
 		}
