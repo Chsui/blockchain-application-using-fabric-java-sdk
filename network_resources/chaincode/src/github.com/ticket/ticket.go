@@ -31,6 +31,8 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		return s.createTicket(APIstub, args)
 	} else if function == "getTicket" {
 		return s.getTicket(APIstub, args)
+	} else if function == "getAllTickets" {
+		return s.getAllTickets(APIstub)
 	} else if function == "changeOwner" {
 		return s.changeOwner(APIstub, args)
 	}
@@ -57,7 +59,7 @@ func (s *SmartContract) getTicket(APIstub shim.ChaincodeStubInterface, args []st
 	return shim.Success(ticketAsBytes)
 }
 
-func (s *SmartContract) getAllTicket(APIstub shim.ChaincodeStubInterface) sc.Response {
+func (s *SmartContract) getAllTickets(APIstub shim.ChaincodeStubInterface) sc.Response {
 	keys := APIstub.GetStringArgs()
 
 	var buffer bytes.Buffer
