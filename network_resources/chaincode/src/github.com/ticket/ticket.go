@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
+	"strconv"
 )
 
 type SmartContract struct {
@@ -21,7 +22,14 @@ type Ticket struct {
 	Price    string `json:"price"`
 }
 
+type TicketId struct {
+	Num int
+}
+
 func (s *SmartContract) Init(APIstub shim.ChaincodeStubInterface) sc.Response {
+	ticketId := TicketId{Num: 0}
+	ticketIdAsBytes, _ := json.Marshal(ticketId)
+	APIstub.PutState("lastid", ticketIdAsBytes)
 	return shim.Success(nil)
 }
 
@@ -39,14 +47,31 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 	return shim.Error("Invalid Function name.")
 }
 
+func setLastId(APIstub shim.ChaincodeStubInterface, Num int) {
+	ticketId := TicketId{Num: Num}
+	ticketIdAsBytes, _ := json.Marshal(ticketId)
+	APIstub.PutState("lastid", ticketIdAsBytes)
+}
+
+func getLastId(APIstub shim.ChaincodeStubInterface) int {
+	lastIdAsBytes, _ := APIstub.GetState("lastid")
+	lastId := TicketId{}
+	json.Unmarshal(lastIdAsBytes, &lastId)
+	return lastId.Num
+}
+
 func (s *SmartContract) createTicket(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	if len(args) != 6 {
 		return shim.Error("Error Incorrect arguments.")
 	}
-	var ticket = Ticket{ID: args[0], Owner: "none", Name: args[1], Date: args[2], Loc: args[3], Position: args[4], Price: args[5]}
+	lastId := getLastId(APIstub)
+	lastId += 1
+	var ticket = Ticket{ID: strconv.Itoa(lastId), Owner: "none", Name: args[0], Date: args[1], Loc: args[2], Position: args[3], Price: args[4]}
 
 	ticketAsBytes, _ := json.Marshal(ticket)
-	APIstub.PutState(args[0], ticketAsBytes)
+	APIstub.PutState(strconv.Itoa(lastId), ticketAsBytes)
+
+	setLastId(APIstub, lastId)
 
 	return shim.Success(nil)
 }
@@ -60,23 +85,24 @@ func (s *SmartContract) getTicket(APIstub shim.ChaincodeStubInterface, args []st
 }
 
 func (s *SmartContract) getAllTickets(APIstub shim.ChaincodeStubInterface) sc.Response {
-	keys := APIstub.GetStringArgs()
+	lastId := getLastId(APIstub)
 
 	var buffer bytes.Buffer
 	buffer.WriteString("[")
 
 	bArrayMemberAlreadyWritten := false
-	for index, value := range keys {
+	for i := 0; i <= lastId; i++ {
 		if bArrayMemberAlreadyWritten == true {
 			buffer.WriteString(",")
 		}
-		buffer.WriteString("{\"Index\":")
+		buffer.WriteString("{\"Id\":")
 		buffer.WriteString("\"")
-		buffer.WriteString(string(index))
+		buffer.WriteString(strconv.Itoa(i))
 		buffer.WriteString("\"")
 
-		buffer.WriteString(", \"Key\":")
-		buffer.WriteString(value)
+		ticketAsBytes, _ := APIstub.GetState(strconv.Itoa(i))
+		buffer.WriteString(", \"Ticket\":")
+		buffer.WriteString(string(ticketAsBytes))
 		buffer.WriteString("}")
 		bArrayMemberAlreadyWritten = true
 	}
