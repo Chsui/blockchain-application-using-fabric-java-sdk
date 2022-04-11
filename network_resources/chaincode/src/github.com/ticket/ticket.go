@@ -43,6 +43,8 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		return s.getAllTickets(APIstub)
 	} else if function == "changeOwner" {
 		return s.changeOwner(APIstub, args)
+	} else if function == "deleteTicket" {
+		return s.deleteTicket(APIstub, args)
 	}
 	return shim.Error("Invalid Function name.")
 }
@@ -124,6 +126,17 @@ func (s *SmartContract) changeOwner(APIstub shim.ChaincodeStubInterface, args []
 	ticketAsBytes, _ = json.Marshal(ticket)
 	APIstub.PutState(args[0], ticketAsBytes)
 
+	return shim.Success(nil)
+}
+
+func (s *SmartContract) deleteTicket(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+	if len(args) != 1 {
+		return shim.Error("Error Incorrect arguments")
+	}
+	err := APIstub.DelState(args[0])
+	if err != nil {
+		return shim.Error(err.Error())
+	}
 	return shim.Success(nil)
 }
 
