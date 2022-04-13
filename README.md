@@ -1,5 +1,13 @@
 ## NOTE: 내가 쓸려고 수정하면서 작업하는 레포지토리 intellJ IDEA 에서 작업중..
 
+jdk 1.8.0_312
+
+maven 3.6.0
+
+docker 20.10.13
+
+docker-compose 1.29.2
+
 # Create and deploy a blockchain network using Hyperledger Fabric SDK for Java
 
 > Set up and initialize the channel, install and instantiate chaincode, and perform invoke and query on your blockchain network
