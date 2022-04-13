@@ -94,19 +94,21 @@ func (s *SmartContract) getAllTickets(APIstub shim.ChaincodeStubInterface) sc.Re
 
 	bArrayMemberAlreadyWritten := false
 	for i := 1; i <= lastId; i++ {
-		if bArrayMemberAlreadyWritten == true {
-			buffer.WriteString(",")
-		}
-		buffer.WriteString("{\"Id\":")
-		buffer.WriteString("\"")
-		buffer.WriteString(strconv.Itoa(i))
-		buffer.WriteString("\"")
-
 		ticketAsBytes, _ := APIstub.GetState(strconv.Itoa(i))
-		buffer.WriteString(", \"Ticket\":")
-		buffer.WriteString(string(ticketAsBytes))
-		buffer.WriteString("}")
-		bArrayMemberAlreadyWritten = true
+		if string(ticketAsBytes) != "" {
+			if bArrayMemberAlreadyWritten == true {
+				buffer.WriteString(",")
+			}
+			buffer.WriteString("{\"Id\":")
+			buffer.WriteString("\"")
+			buffer.WriteString(strconv.Itoa(i))
+			buffer.WriteString("\"")
+
+			buffer.WriteString(", \"Ticket\":")
+			buffer.WriteString(string(ticketAsBytes))
+			buffer.WriteString("}")
+			bArrayMemberAlreadyWritten = true
+		}
 	}
 	buffer.WriteString("]")
 
