@@ -93,6 +93,7 @@ public class InvokeChaincode {
 			for (ProposalResponse res: responses) {
 				Status status = res.getStatus();
 				Logger.getLogger(InvokeChaincode.class.getName()).log(Level.INFO,"Invoked " + func + " on "+ Config.CHAINCODE_1_NAME + ". Status - " + status);
+				System.out.println("Invoked " + func + " on "+ Config.CHAINCODE_1_NAME + ". Status - " + status);
 			}
 									
 		} catch (Exception e) {

@@ -80,6 +80,7 @@ public class QueryChaincode {
 			for (ProposalResponse pres : responses1Query) {
 				String stringResponse = new String(pres.getChaincodeActionResponsePayload());
 				Logger.getLogger(QueryChaincode.class.getName()).log(Level.INFO, stringResponse);
+				System.out.println(stringResponse);
 			}		
 			
 		} catch (Exception e) {
