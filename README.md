@@ -1,5 +1,7 @@
 ## NOTE: 내가 쓸려고 수정하면서 작업하는 레포지토리 intellJ IDEA 에서 작업중..
 
+Ubuntu 18.04 LTS
+
 jdk 1.8.0_312
 
 maven 3.6.0
