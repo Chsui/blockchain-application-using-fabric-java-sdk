@@ -150,11 +150,11 @@ func (s *SmartContract) getTransaction(APIstub shim.ChaincodeStubInterface, args
 		return shim.Error("Error Incorrect arguments")
 	}
 	cid := APIstub.GetChannelID()
-	ledger := peer.GetLedger(cid)
+	/*ledger := peer.GetLedger(cid)
 	if ledger == nil {
 		return shim.Error("Error GetLedger")
 	}
-	/*_, err := ledger.GetTransactionByID(args[0])
+	_, err := ledger.GetTransactionByID(args[0])
 	if err != nil {
 		return shim.Error(err.Error())
 	}*/
