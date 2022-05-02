@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
+	"github.com/hyperledger/fabric/core/peer"
 	sc "github.com/hyperledger/fabric/protos/peer"
 	"strconv"
 )
@@ -149,15 +150,10 @@ func (s *SmartContract) getTransaction(APIstub shim.ChaincodeStubInterface, args
 		return shim.Error("Error Incorrect arguments")
 	}
 	cid := APIstub.GetChannelID()
-	fmt.Printf(cid)
-	/*ledger := peer.GetLedger(cid)
-	if ledger == nil {
-		return shim.Error("Error GetLedger")
+	ledger := peer.GetLedger(cid)
+	if ledger != nil {
+		return shim.Success(nil)
 	}
-	_, err := ledger.GetTransactionByID(args[0])
-	if err != nil {
-		return shim.Error(err.Error())
-	}*/
 	return shim.Success(nil)
 }
 
