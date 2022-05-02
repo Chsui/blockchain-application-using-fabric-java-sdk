@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
+	"github.com/hyperledger/fabric/protos/common"
 	sc "github.com/hyperledger/fabric/protos/peer"
+	"github.com/hyperledger/fabric/protos/utils"
 	"strconv"
 )
 
@@ -74,6 +76,12 @@ func (s *SmartContract) createTicket(APIstub shim.ChaincodeStubInterface, args [
 	APIstub.PutState(strconv.Itoa(lastId), ticketAsBytes)
 
 	setLastId(APIstub, lastId)
+
+	var txPayload *common.Payload
+	tx, err := utils.GetTransaction(txPayload.Data)
+	if err != nil {
+		return shim.Success([]byte(tx.String()))
+	}
 
 	return shim.Success(nil)
 }

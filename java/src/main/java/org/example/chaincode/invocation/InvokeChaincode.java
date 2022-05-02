@@ -92,8 +92,10 @@ public class InvokeChaincode {
 			Collection<ProposalResponse> responses = channelClient.sendTransactionProposal(request);
 			for (ProposalResponse res: responses) {
 				Status status = res.getStatus();
+				String stringResponse = new String(res.getChaincodeActionResponsePayload());
 				Logger.getLogger(InvokeChaincode.class.getName()).log(Level.INFO,"Invoked " + func + " on "+ Config.CHAINCODE_1_NAME + ". Status - " + status);
 				System.out.println("Invoked " + func + " on "+ Config.CHAINCODE_1_NAME + ". Status - " + status);
+				System.out.println(stringResponse);
 			}
 									
 		} catch (Exception e) {

@@ -76,8 +76,8 @@ public class QueryChaincode {
 
 			Logger.getLogger(QueryChaincode.class.getName()).log(Level.INFO, "Querying chaincode " + func + " with arguments- " + Arrays.toString(arguments));
 			
-			Collection<ProposalResponse>  responses1Query = channelClient.queryByChainCode(Config.CHAINCODE_1_NAME, func, arguments);
-			for (ProposalResponse pres : responses1Query) {
+			Collection<ProposalResponse>  responsesQuery = channelClient.queryByChainCode(Config.CHAINCODE_1_NAME, func, arguments);
+			for (ProposalResponse pres : responsesQuery) {
 				String stringResponse = new String(pres.getChaincodeActionResponsePayload());
 				Logger.getLogger(QueryChaincode.class.getName()).log(Level.INFO, stringResponse);
 				System.out.println(stringResponse);
