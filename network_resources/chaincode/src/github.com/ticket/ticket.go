@@ -46,6 +46,8 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		return s.changeOwner(APIstub, args)
 	} else if function == "deleteTicket" {
 		return s.deleteTicket(APIstub, args)
+	} else if function == "getTransaction" {
+		return s.getTransaction(APIstub, args)
 	}
 	return shim.Error("Invalid Function name.")
 }
