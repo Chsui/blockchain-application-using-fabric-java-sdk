@@ -148,12 +148,16 @@ func (s *SmartContract) getTransaction(APIstub shim.ChaincodeStubInterface, args
 		return shim.Error("Error Incorrect arguments")
 	}
 	ledgerId, err := ledgermgmt.GetLedgerIDs()
-	ledger, err := ledgermgmt.OpenLedger(ledgerId[0])
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success([]byte(ledgerId[0]))
+	/*ledger, err := ledgermgmt.OpenLedger(ledgerId[0])
 	tx, err := ledger.GetTransactionByID(args[0])
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	return shim.Success([]byte(tx.String()))
+	return shim.Success([]byte(tx.String()))*/
 }
 
 func main() {
