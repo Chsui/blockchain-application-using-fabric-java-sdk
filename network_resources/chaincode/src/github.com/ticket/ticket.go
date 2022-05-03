@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
+	"github.com/hyperledger/fabric/core/ledger/ledgermgmt"
 	sc "github.com/hyperledger/fabric/protos/peer"
 	"strconv"
 )
@@ -140,6 +141,19 @@ func (s *SmartContract) deleteTicket(APIstub shim.ChaincodeStubInterface, args [
 		return shim.Error(err.Error())
 	}
 	return shim.Success(nil)
+}
+
+func (s *SmartContract) getTransaction(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+	if len(args) != 1 {
+		return shim.Error("Error Incorrect arguments")
+	}
+	ledgerId, err := ledgermgmt.GetLedgerIDs()
+	ledger, err := ledgermgmt.OpenLedger(ledgerId[0])
+	tx, err := ledger.GetTransactionByID(args[0])
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success([]byte(tx.String()))
 }
 
 func main() {
