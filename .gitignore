@@ -133,3 +133,4 @@ $RECYCLE.BIN/
 .idea/
 network_resources/chaincode/src/chaincode/.gradle/
 network_resources/chaincode/src/chaincode/build/
+/java/target/
