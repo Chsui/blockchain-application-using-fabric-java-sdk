@@ -9,9 +9,6 @@ import (
 	"strconv"
 )
 
-type SmartContract struct {
-}
-
 type Ticket struct {
 	ID       string `json:"id"`
 	Owner    string `json:"owner"`
@@ -24,6 +21,9 @@ type Ticket struct {
 
 type TicketId struct {
 	Num int
+}
+
+type SmartContract struct {
 }
 
 func (s *SmartContract) Init(APIstub shim.ChaincodeStubInterface) sc.Response {
@@ -47,19 +47,6 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		return s.deleteTicket(APIstub, args)
 	}
 	return shim.Error("Invalid Function name.")
-}
-
-func setLastId(APIstub shim.ChaincodeStubInterface, Num int) {
-	ticketId := TicketId{Num: Num}
-	ticketIdAsBytes, _ := json.Marshal(ticketId)
-	APIstub.PutState("lastid", ticketIdAsBytes)
-}
-
-func getLastId(APIstub shim.ChaincodeStubInterface) int {
-	lastIdAsBytes, _ := APIstub.GetState("lastid")
-	lastId := TicketId{}
-	json.Unmarshal(lastIdAsBytes, &lastId)
-	return lastId.Num
 }
 
 func (s *SmartContract) createTicket(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
@@ -140,6 +127,19 @@ func (s *SmartContract) deleteTicket(APIstub shim.ChaincodeStubInterface, args [
 		return shim.Error(err.Error())
 	}
 	return shim.Success(nil)
+}
+
+func setLastId(APIstub shim.ChaincodeStubInterface, Num int) {
+	ticketId := TicketId{Num: Num}
+	ticketIdAsBytes, _ := json.Marshal(ticketId)
+	APIstub.PutState("lastid", ticketIdAsBytes)
+}
+
+func getLastId(APIstub shim.ChaincodeStubInterface) int {
+	lastIdAsBytes, _ := APIstub.GetState("lastid")
+	lastId := TicketId{}
+	json.Unmarshal(lastIdAsBytes, &lastId)
+	return lastId.Num
 }
 
 func main() {
