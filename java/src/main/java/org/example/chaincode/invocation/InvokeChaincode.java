@@ -44,7 +44,7 @@ public class InvokeChaincode {
 	private static final byte[] EXPECTED_EVENT_DATA = "!".getBytes(UTF_8);
 	private static final String EXPECTED_EVENT_NAME = "event";
 
-	public static void main(String args[]) {
+	public static String main(String args[]) {
 		try {
             Util.cleanUp();
 			String caUrl = Config.CA_ORG1_URL;
@@ -93,12 +93,13 @@ public class InvokeChaincode {
 			for (ProposalResponse res: responses) {
 				Status status = res.getStatus();
 				Logger.getLogger(InvokeChaincode.class.getName()).log(Level.INFO,"Invoked " + func + " on "+ Config.CHAINCODE_1_NAME + ". Status - " + status);
-				System.out.println("Invoked " + func + " on "+ Config.CHAINCODE_1_NAME + ". Status - " + status);
+				return "Invoked " + func + " on "+ Config.CHAINCODE_1_NAME + ". Status - " + status;
 			}
 									
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 }
