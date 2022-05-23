@@ -44,7 +44,7 @@ public class QueryChaincode {
 	private static final byte[] EXPECTED_EVENT_DATA = "!".getBytes(UTF_8);
 	private static final String EXPECTED_EVENT_NAME = "event";
 
-	public static String main(String args[]) {
+	public static void main(String args[]) {
 		try {
             Util.cleanUp();
 			String caUrl = Config.CA_ORG1_URL;
@@ -80,13 +80,12 @@ public class QueryChaincode {
 			for (ProposalResponse pres : responsesQuery) {
 				String stringResponse = new String(pres.getChaincodeActionResponsePayload());
 				Logger.getLogger(QueryChaincode.class.getName()).log(Level.INFO, stringResponse);
-				return stringResponse;
+				System.out.println(stringResponse);
 			}		
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
 	}
 
 }
